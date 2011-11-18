@@ -6,6 +6,7 @@ module RedmineIrcNotifications
     @@port     = nil
     @@nick     = nil
     @@user     = nil
+    @@pass     = nil
     @@channel  = nil
     @@nickserv = nil
     @@throttle = nil
@@ -49,6 +50,9 @@ module RedmineIrcNotifications
             sock = TCPSocket.open(@@server, @@port || 6667)
             sock.puts "USER #{@@user} 0 * #{@@user}"
             sock.puts "NICK #{@@nick}"
+            if @@pass
+              sock.puts "PASS #{@@pass}"
+            end
 
             unless nick_available?(sock)
               if @@nickserv
@@ -86,6 +90,7 @@ module RedmineIrcNotifications
       @@server = options[Rails.env]['server']
       @@nick = options[Rails.env]['nick']
       @@user = options[Rails.env]['user']
+      @@pass = options[Rails.env]['pass']
       @@channel = options[Rails.env]['channel']
       @@nickserv = options[Rails.env]['nickserv']
       @@throttle = options[Rails.env]['throttle']
